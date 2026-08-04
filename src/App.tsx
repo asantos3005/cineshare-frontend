@@ -5,14 +5,16 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
-    <main className="px-7 bg-neutral-100">
-      <Routes>
-        <Route element={<StandardLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
+    <>
+        <Routes>
+          <Route element={<StandardLayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
 
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </main>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      
+    </>
+    
   );
 }
