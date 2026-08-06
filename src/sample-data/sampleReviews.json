@@ -1,0 +1,13 @@
+{
+  "movieTitle": "Inception",
+  "movieImageUrl": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
+  "movieImageAlt": "Inception Movie Poster",
+  "rating": 5,
+  "reviewBody": "Inception is a mind-bending thriller that keeps you on the edge of your seat. The concept of dreams within dreams is executed brilliantly, and the visual effects are stunning. Leonardo DiCaprio delivers a powerful performance, and the supporting cast is equally impressive. The film's score by Hans Zimmer adds to the intensity and atmosphere. Overall, Inception is a masterpiece that challenges the audience's perception of reality and leaves a lasting impact.",
+  "reviewedAt": "2023-10-15T14:30:00Z",
+  "author": {
+    "username": "moviebuff123",
+    "profileImageUrl": "https://example.com/profiles/moviebuff123.jpg"
+  },
+  "likeCount": 42
+}
