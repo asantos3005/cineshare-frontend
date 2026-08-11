@@ -22,27 +22,29 @@ export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCa
     }
 
   return (
-    <div className="border-1 border-neutral-500 dark:border-white p-4 rounded-lg shadow-md">
+    <article className="rounded-lg border border-neutral-300 bg-white p-4 shadow-sm dark:border-white dark:bg-neutral-950 sm:p-5">
         {/* Top Bar of the review card*/}
-        <div className="flex items-center gap-2">
-            <img src={reviewObject.author.profileImageUrl || 'https://via.placeholder.com/150'} alt={`${reviewObject.author.username}'s profile`} className="w-12 h-12 rounded-full" />
-            <b>{reviewObject.author.username}</b>
-            <b>{reviewObject.reviewedAt}</b>
+        <div className="mb-4 flex items-center gap-3">
+            <img src={reviewObject.author.profileImageUrl || 'https://via.placeholder.com/150'} alt={`${reviewObject.author.username}'s profile`} className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12" />
+            <div className="flex min-w-0 flex-col">
+                <span className="text-sm font-semibold">{reviewObject.author.username}</span>
+                <span className="text-xs text-gray-500">{new Date(reviewObject.reviewedAt).toLocaleDateString()}</span>
+            </div>
         </div>
         
-        <div className="flex items-center gap-2 pr-30">
-            <img src={reviewObject.movieImageUrl} alt={reviewObject.movieImageAlt} className="max-w-3xs rounded-md" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <img src={reviewObject.movieImageUrl} alt={reviewObject.movieImageAlt} className="aspect-[2/3] w-full rounded-md object-cover sm:w-36 md:w-44" />
             
-            <div className="flex flex-col">
+            <div className="flex min-w-0 flex-col gap-2">
                 <h1 className="text-card-title">{reviewObject.movieTitle}</h1>
-                <p className="text-body text-gray-600 ">{reviewObject.movieReleaseYear}</p>
-                <div className="flex items-center gap-1">
+                <p className="text-sm text-gray-600">{reviewObject.movieReleaseYear}</p>
+                <div className="flex items-center gap-1 text-lg">
                     {renderStars(reviewObject.rating)}
                 </div>
                 <p className="text-body">{reviewObject.reviewBody}</p>
             </div>
         </div>
         
-    </div>
+    </article>
   );
 }

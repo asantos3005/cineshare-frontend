@@ -14,18 +14,18 @@
   }
 
   .text-card-title {
-    @apply text-2xl font-semibold;
+    @apply text-xl font-semibold leading-tight sm:text-2xl;
   }
 
   .text-body {
-    @apply text-base leading-7;
+    @apply text-sm leading-6 text-neutral-800 sm:text-base sm:leading-7;
   }
 
   .page-title {
-    @apply text-4xl font-bold mb-4;
+    @apply text-3xl font-bold leading-tight sm:text-4xl;
   }
 
   .page-title-subheading {
-    @apply text-lg text-gray-600;
+    @apply text-base text-gray-600 sm:text-lg;
   }
 }

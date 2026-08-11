@@ -10,7 +10,7 @@ export default function Searchbar() {
 
   return (
     <Form
-      className="flex w-full max-w-64 gap-4"
+      className="flex min-w-0 flex-1 items-start gap-2 sm:max-w-80 sm:gap-3"
       errors={errors}
       onSubmit={async (event) => {
         event.preventDefault();
@@ -27,7 +27,7 @@ export default function Searchbar() {
         setLoading(false);
       }}
     >
-      <Field.Root name="url" className="flex flex-col items-start gap-1">
+      <Field.Root name="url" className="flex min-w-0 flex-1 flex-col items-start gap-1">
         <Field.Control
           type="url"
           required

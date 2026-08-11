@@ -8,15 +8,15 @@ function StandardLayout() {
     const isHome = pathname === '/';
 
     return (
-        <main className="px-7 bg-neutral-100">
+        <main className="min-h-screen bg-neutral-100 px-4 py-3 sm:px-6 lg:px-8">
             
             {/* This div is the header row for the entire app. Can add specific page 
             header elements to be in same row as the menudrawer button. */}
-            <div className="flex items-center justify-between mt-2 gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
                 <MenuDrawer />
 
                 {isHome && (
-                    <div className="flex items-center gap-4">
+                    <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
                         <Searchbar />
                         <ProfileCircle />
                     </div>
