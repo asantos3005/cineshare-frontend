@@ -4,14 +4,14 @@ import sampleReviews from "../sample-data/sampleReviews.json";
 import type { ReviewCardData } from "../types/reviewCardData";
 
 function Home(){
-    const [reviews] = useState([sampleReviews]);
+    const [reviews] = useState(sampleReviews as ReviewCardData[]);
     return (
         <>
             <div className="flex flex-col">
-                <h1 className="text-4xl font-bold mb-4">Latest Reviews</h1>
-                <p className="text-lg text-gray-600">See what fellow movie lovers are saying!</p>
+                <h1 className="page-title">Latest Reviews</h1>
+                <p className="page-title-subheading">See what fellow movie lovers are saying!</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-4">
                 {/* Review Cards will go in here */}
                 {reviews.map((review : ReviewCardData) => (
                     <ReviewCard reviewObject={review} />
