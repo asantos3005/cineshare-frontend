@@ -1,5 +1,6 @@
 {
   "movieTitle": "Inception",
+  "movieReleaseYear": 2010,
   "movieImageUrl": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
   "movieImageAlt": "Inception Movie Poster",
   "rating": 5,
@@ -7,7 +8,7 @@
   "reviewedAt": "2023-10-15T14:30:00Z",
   "author": {
     "username": "moviebuff123",
-    "profileImageUrl": "https://example.com/profiles/moviebuff123.jpg"
+    "profileImageUrl": "/assets/homerProfile.jpg"
   },
   "likeCount": 42
 }

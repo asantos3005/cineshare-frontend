@@ -3,3 +3,21 @@
 #root {   
   isolation: isolate; 
 }
+
+@layer components {
+  .text-page-title {
+    @apply text-4xl font-bold tracking-tight md:text-5xl;
+  }
+
+  .text-section-title {
+    @apply text-2xl font-semibold tracking-tight md:text-3xl;
+  }
+
+  .text-card-title {
+    @apply text-xl font-semibold;
+  }
+
+  .text-body {
+    @apply text-base leading-7;
+  }
+}

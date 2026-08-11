@@ -1,5 +1,6 @@
 export type ReviewCardData = {
   movieTitle: string;
+  movieReleaseYear: number;
   movieImageUrl: string;
   movieImageAlt: string;
   rating: number;

@@ -1,10 +1,10 @@
 import ReviewCard from "../components/ReviewCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import sampleReviews from "../sample-data/sampleReviews.json";
 import type { ReviewCardData } from "../types/reviewCardData";
 
 function Home(){
-    const [reviews, setReviews] = useState([sampleReviews]);
+    const [reviews] = useState([sampleReviews]);
     return (
         <>
             <div className="flex flex-col">
