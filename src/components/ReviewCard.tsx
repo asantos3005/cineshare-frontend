@@ -22,7 +22,7 @@ export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCa
     }
 
   return (
-    <article className="rounded-lg border border-neutral-300 bg-white p-4 shadow-sm dark:border-white dark:bg-neutral-950 sm:p-5">
+    <article className="rounded-lg border border-neutral-300 bg-white p-4 shadow-sm sm:p-5">
         {/* Top Bar of the review card*/}
         <div className="mb-4 flex items-center gap-3">
             <img src={reviewObject.author.profileImageUrl || 'https://via.placeholder.com/150'} alt={`${reviewObject.author.username}'s profile`} className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12" />
