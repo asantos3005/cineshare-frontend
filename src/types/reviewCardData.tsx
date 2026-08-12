@@ -1,4 +1,5 @@
 export type ReviewCardData = {
+  reviewId: string;
   movieTitle: string;
   movieReleaseYear: number;
   movieImageUrl: string;
