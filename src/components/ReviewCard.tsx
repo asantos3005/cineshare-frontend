@@ -1,8 +1,14 @@
 import type { ReviewCardData } from '../types/reviewCardData';
+import { useState } from 'react';
 import { IoMdStar } from "react-icons/io";
 import { IoMdStarHalf } from "react-icons/io";
-
+import { BiHeart } from "react-icons/bi";
+import { BiSolidHeart } from "react-icons/bi";
+import { PiChatTeardropTextBold } from "react-icons/pi";
+import { PiChatCircleBold } from "react-icons/pi";
 export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCardData }) {
+
+    const [isLiked, setIsLiked] = useState(false);
 
     function renderStars(rating: number) {
         const fullStars = Math.floor(rating);
@@ -43,6 +49,15 @@ export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCa
                 </div>
                 <p className="text-body">{reviewObject.reviewBody}</p>
             </div>
+        </div>
+
+        <div className="flex items-center gap-9 mt-4">
+            {isLiked ? (
+                <BiSolidHeart className="h-6 w-6 text-red-500 cursor-pointer" onClick={() => setIsLiked(false)} />
+            ) : (
+                <BiHeart className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => setIsLiked(true)} />
+            )}
+            <PiChatCircleBold className="h-5.5 w-5.5 text-gray-500 cursor-pointer ml-4" />
         </div>
         
     </article>
