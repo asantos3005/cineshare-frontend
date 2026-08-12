@@ -1,4 +1,5 @@
 import Searchbar from "../components/Searchbar";
+import AppLinkButton from "../components/LinkButton";
 import { useState } from "react";
 import type { ReviewCardData } from "../types/reviewCardData";
 
@@ -12,8 +13,11 @@ export default function MyReviews() {
                 <h1 className="page-title">My Reviews</h1>
                 <p className="page-title-subheading">See all the reviews you've written.</p>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex justify-between gap-2">
                 <Searchbar />
+                <AppLinkButton to="/reviews/add-review" variant="primary">
+                    New Review
+                </AppLinkButton>
             </div>
             <div className="flex flex-col gap-4 sm:gap-5">
                 {/* Review Cards will go in here */}
