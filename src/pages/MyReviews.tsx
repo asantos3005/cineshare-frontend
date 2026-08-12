@@ -5,7 +5,7 @@ import type { ReviewCardData } from "../types/reviewCardData";
 
 
 export default function MyReviews() {
-    const [reviews, setReviews] = useState<ReviewCardData[]>([]);
+    const [reviews] = useState<ReviewCardData[]>([]);
 
     return (
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-6 sm:py-8">
