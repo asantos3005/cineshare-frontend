@@ -12,4 +12,5 @@ export type ReviewCardData = {
     profileImageUrl: string | null;
   };
   likeCount: number;
+  commentCount: number;
 };

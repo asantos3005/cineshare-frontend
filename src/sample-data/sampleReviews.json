@@ -12,7 +12,8 @@
       "username": "moviebuff123",
       "profileImageUrl": "/assets/homerProfile.jpg"
     },
-    "likeCount": 42
+    "likeCount": 42,
+    "commentCount": 5
   },
   {
     "reviewId": "2",
@@ -27,6 +28,7 @@
       "username": "moviebuff123",
       "profileImageUrl": "/assets/homerProfile.jpg"
     },
-    "likeCount": 42
+    "likeCount": 100,
+    "commentCount": 3
   }
 ]

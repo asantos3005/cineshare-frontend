@@ -4,11 +4,18 @@ import { IoMdStar } from "react-icons/io";
 import { IoMdStarHalf } from "react-icons/io";
 import { BiHeart } from "react-icons/bi";
 import { BiSolidHeart } from "react-icons/bi";
-import { PiChatTeardropTextBold } from "react-icons/pi";
 import { PiChatCircleBold } from "react-icons/pi";
 export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCardData }) {
 
     const [isLiked, setIsLiked] = useState(false);
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(reviewObject.likeCount);
+
+    function handleLikeToggle() {
+        const nextIsLiked = !isLiked;
+
+        setIsLiked(nextIsLiked);
+        setDisplayedLikeCount((currentLikeCount) => currentLikeCount + (nextIsLiked ? 1 : -1));
+    }
 
     function renderStars(rating: number) {
         const fullStars = Math.floor(rating);
@@ -52,12 +59,20 @@ export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCa
         </div>
 
         <div className="flex items-center gap-9 mt-4">
-            {isLiked ? (
-                <BiSolidHeart className="h-6 w-6 text-red-500 cursor-pointer" onClick={() => setIsLiked(false)} />
-            ) : (
-                <BiHeart className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => setIsLiked(true)} />
-            )}
-            <PiChatCircleBold className="h-5.5 w-5.5 text-gray-500 cursor-pointer ml-4" />
+            <div className="flex items-center gap-2">
+                {isLiked ? (
+                    <BiSolidHeart className="h-6 w-6 text-red-500 cursor-pointer" onClick={handleLikeToggle} />
+                    ) : (
+                    <BiHeart className="h-6 w-6 text-gray-500 cursor-pointer" onClick={handleLikeToggle} />
+                    )
+                }
+                <span className="text-xs text-gray-500 font-normal">{displayedLikeCount}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+                <PiChatCircleBold className="h-5.5 w-5.5 text-gray-500 cursor-pointer" />
+                <span className="text-xs text-gray-500 font-normal">{reviewObject.commentCount}</span>
+            </div>
         </div>
         
     </article>
