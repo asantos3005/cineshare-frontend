@@ -1,10 +1,15 @@
 import ReviewCard from "../components/ReviewCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import sampleReviews from "../sample-data/sampleReviews.json";
 import type { ReviewCardData } from "../types/reviewCardData";
 
 function Home(){
-    const [reviews] = useState(sampleReviews as ReviewCardData[]);
+    const [reviews, setReviews] = useState<ReviewCardData[]>([]);
+
+    useEffect(() => {
+        setReviews(sampleReviews as ReviewCardData[]);
+    }, []);
+    
     return (
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-6 sm:py-8">
             <div className="flex flex-col gap-2">
