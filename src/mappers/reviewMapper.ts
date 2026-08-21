@@ -1,6 +1,6 @@
 import type { ReviewCardData } from "../types/reviewCardData";
 
-export function mapAPIReviewToReviewCardData(apiReviewResponse: any): ReviewCardData {
+export default function mapAPIReviewToReviewCardData(apiReviewResponse: any): ReviewCardData {
     return {
         reviewId: apiReviewResponse.ReviewId,
         movieTitle: apiReviewResponse.MovieTitle,
