@@ -18,8 +18,9 @@ export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCa
     }
 
     function renderStars(rating: number) {
-        const fullStars = Math.floor(rating);
-        const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+        const normalizedRating = Number.isFinite(rating) ? Math.max(0, Math.min(rating, 5)) : 0;
+        const fullStars = Math.floor(normalizedRating);
+        const halfStar = normalizedRating % 1 >= 0.5 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStar;
         return (
             <>

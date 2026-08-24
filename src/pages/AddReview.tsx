@@ -10,6 +10,8 @@ const selectedMovie = {
 };
 
 export default function AddReview() {
+
+    
     return (
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 py-6 sm:py-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

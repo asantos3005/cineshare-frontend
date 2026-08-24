@@ -2,19 +2,19 @@ import type { ReviewCardData } from "../types/reviewCardData";
 
 export default function mapAPIReviewToReviewCardData(apiReviewResponse: any): ReviewCardData {
     return {
-        reviewId: apiReviewResponse.ReviewId,
-        movieTitle: apiReviewResponse.MovieTitle,
-        movieReleaseYear: apiReviewResponse.MovieReleaseDate.split('-')[0], // Extracting the year from the date string
-        movieImageUrl: apiReviewResponse.PosterUrl,
-        movieImageAlt: apiReviewResponse.MovieTitle ? `${apiReviewResponse.MovieTitle} Poster` : "Movie Poster", // Fallback alt text if not provided
-        rating: apiReviewResponse.Rating,
-        reviewBody: apiReviewResponse.ReviewBody,
-        reviewedAt: apiReviewResponse.CreatedAt, // Assuming the API provides a created_at field for the review date
+        reviewId: apiReviewResponse.reviewId,
+        movieTitle: apiReviewResponse.movieTitle,
+        movieReleaseYear: Number(apiReviewResponse.movieReleaseDate?.split("-")[0] ?? apiReviewResponse.movieReleaseDate?.split("-")[0] ?? 0),
+        movieImageUrl: apiReviewResponse.posterUrl,
+        movieImageAlt: apiReviewResponse.movieTitle ? `${apiReviewResponse.movieTitle} Poster` : "Movie Poster",
+        rating: Number(apiReviewResponse.rating ?? apiReviewResponse.rating ?? 0),
+        reviewBody: apiReviewResponse.reviewBody,
+        reviewedAt: apiReviewResponse.createdAt,
         author: {
-            username: apiReviewResponse.Username,
-            profileImageUrl: apiReviewResponse.UserProfilePictureUrl || null // Fallback to null if not provided
+            username: apiReviewResponse.username,
+            profileImageUrl: apiReviewResponse.userProfilePictureUrl || null
         },
-        likeCount: apiReviewResponse.like_count,
-        commentCount: apiReviewResponse.comment_count
+        likeCount: apiReviewResponse.like_count ?? apiReviewResponse.likeCount ?? 0,
+        commentCount: apiReviewResponse.comment_count ?? apiReviewResponse.commentCount ?? 0
     };
 }
