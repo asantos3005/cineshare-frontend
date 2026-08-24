@@ -4,37 +4,71 @@ import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Button } from '@base-ui/react/button';
 
-export default function Searchbar() {
-  const [errors, setErrors] = React.useState({});
+type SearchbarProps = {
+  name?: string;
+  placeholder?: string;
+  buttonText?: string;
+  className?: string;
+  inputClassName?: string;
+  buttonClassName?: string;
+  onSearch?: (query: string) => void | Promise<void>;
+};
+
+export default function Searchbar({
+  name = 'search',
+  placeholder = 'Search',
+  buttonText = 'Search',
+  className,
+  inputClassName,
+  buttonClassName,
+  onSearch,
+}: SearchbarProps) {
+  const [errors, setErrors] = React.useState<Record<string, string | string[]>>({});
   const [loading, setLoading] = React.useState(false);
+  
+  const formClassName = [
+    'flex min-w-0 flex-1 items-start gap-2 sm:gap-3',
+    className ?? 'sm:max-w-80',
+  ].join(' ');
+  const controlClassName = [
+    'h-8 w-full border border-neutral-950 bg-white px-2 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 placeholder:text-neutral-500 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950',
+    inputClassName,
+  ].filter(Boolean).join(' ');
+  const submitButtonClassName = [
+    'flex h-8 items-center justify-center gap-2 rounded-none border border-neutral-950 bg-white px-3 text-sm leading-none whitespace-nowrap font-normal text-neutral-950 select-none hover:not-data-disabled:bg-neutral-100 active:not-data-disabled:bg-neutral-200 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500',
+    buttonClassName,
+  ].filter(Boolean).join(' ');
 
   return (
     <Form
-      className="flex min-w-0 flex-1 items-start gap-2 sm:max-w-80 sm:gap-3"
+      className={formClassName}
       errors={errors}
       onSubmit={async (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const value = formData.get('url') as string;
+        const query = formData.get(name)?.toString().trim() ?? '';
 
+        if (!query) {
+          setErrors({ [name]: 'Enter a search term' });
+          return;
+        }
+
+        setErrors({});
         setLoading(true);
-        const response = await submitForm(value);
-        const serverErrors = {
-          url: response.error,
-        };
 
-        setErrors(serverErrors);
-        setLoading(false);
+        try {
+          await onSearch?.(query);
+        } finally {
+          setLoading(false);
+        }
       }}
     >
-      <Field.Root name="url" className="flex min-w-0 flex-1 flex-col items-start gap-1">
+      <Field.Root name={name} className="flex min-w-0 flex-1 flex-col items-start gap-1">
         <Field.Control
-          type="url"
+          type="search"
           required
-          defaultValue="https://example.com"
-          placeholder="https://example.com"
-          pattern="https?://.*"
-          className="h-8 w-full border border-neutral-950 bg-white px-2 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 placeholder:text-neutral-500 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950"
+          placeholder={placeholder}
+          className={controlClassName}
         />
         <Field.Error className="text-sm text-red-700" />
       </Field.Root>
@@ -42,29 +76,10 @@ export default function Searchbar() {
         disabled={loading}
         focusableWhenDisabled
         type="submit"
-        className="flex h-8 items-center justify-center gap-2 rounded-none border border-neutral-950 bg-white px-3 text-sm leading-none whitespace-nowrap font-normal text-neutral-950 select-none hover:not-data-disabled:bg-neutral-100 active:not-data-disabled:bg-neutral-200 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500"
+        className={submitButtonClassName}
       >
-        Submit
+        {buttonText}
       </Button>
     </Form>
   );
-}
-
-async function submitForm(value: string) {
-  // Mimic a server response
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-
-  try {
-    const url = new URL(value);
-
-    if (url.hostname.endsWith('example.com')) {
-      return { error: 'The example domain is not allowed' };
-    }
-  } catch {
-    return { error: 'This is not a valid URL' };
-  }
-
-  return { success: true };
 }
