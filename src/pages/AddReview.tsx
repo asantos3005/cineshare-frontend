@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { FaBold, FaItalic, FaListUl, FaQuoteLeft, FaUnderline } from "react-icons/fa";
 import { IoMdClose, IoMdStar, IoMdStarOutline } from "react-icons/io";
+import { useState } from "react";
 
 const selectedMovie = {
     title: "Everything Everywhere All at Once",
@@ -10,8 +11,24 @@ const selectedMovie = {
 };
 
 export default function AddReview() {
+    const [movieSearchResults, setMovieSearchResults] = useState([]);
+    const [movieToReview, setMovieToReview] = useState();
 
-    
+    function handleMovieSearch(query: string) {
+        // Implement your movie search logic here, e.g., call an API to fetch movie results based on the query
+        // For now, we'll just log the query to the console
+        fetch(`http://localhost:5203/api/movies/search=${query}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setMovieSearchResults(data.results);
+            })
+            .catch((error) => {
+                console.error("Error fetching movie search results:", error);
+            });
+        console.log("Searching for movies with query:", query);
+    }
+
+
     return (
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 py-6 sm:py-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -35,6 +52,7 @@ export default function AddReview() {
                         type="search"
                         placeholder="Search for a movie..."
                         className="h-12 rounded-lg border border-neutral-300 bg-white px-4 text-base text-neutral-950 shadow-sm placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950"
+                        onChange={(e) => handleMovieSearch(e.target.value)}
                     />
                 </label>
 
