@@ -4,7 +4,7 @@ export default function mapAPIReviewToReviewCardData(apiReviewResponse: any): Re
     return {
         reviewId: apiReviewResponse.reviewId,
         movieTitle: apiReviewResponse.movieTitle,
-        movieReleaseYear: Number(apiReviewResponse.movieReleaseDate?.split("-")[0] ?? apiReviewResponse.movieReleaseDate?.split("-")[0] ?? 0),
+        movieReleaseYear: apiReviewResponse.movieReleaseYear ?? apiReviewResponse.releaseYear ?? 0,
         movieImageUrl: apiReviewResponse.posterUrl,
         movieImageAlt: apiReviewResponse.movieTitle ? `${apiReviewResponse.movieTitle} Poster` : "Movie Poster",
         rating: Number(apiReviewResponse.rating ?? apiReviewResponse.rating ?? 0),

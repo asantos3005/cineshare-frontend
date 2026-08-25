@@ -1,12 +1,20 @@
 import Searchbar from "../components/Searchbar";
 import AppLinkButton from "../components/LinkButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ReviewCardData } from "../types/reviewCardData";
 
 
 
 export default function MyReviews() {
-    const [reviews] = useState<ReviewCardData[]>([]);
+    const [reviews, setReviews] = useState<ReviewCardData[]>([]);
+
+    useEffect(() => {
+        // Fetch the user's reviews from your API and set them in state
+        // For example:
+        fetch('http://localhost:5203/api/reviews/my-reviews')
+            .then(response => response.json())
+            .then(data => setReviews(data));
+    }, []);
 
 
     return (
