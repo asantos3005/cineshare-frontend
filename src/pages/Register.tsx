@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
+import { getAuthDataFromResponse, useAuth } from "../auth/AuthContext";
 
 type RegisterFormData = {
     email: string;
@@ -10,6 +11,7 @@ type RegisterFormData = {
 
 export default function Register() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [formData, setFormData] = useState<RegisterFormData>({
         email: "",
         username: "",
@@ -47,9 +49,11 @@ export default function Register() {
             return;
         }
 
-        setSubmitMessage(
-            `Successfully registered ${formData.username}.`
-        );
+        const authApiResponse = await response.json().catch(() => null);
+        const authData = getAuthDataFromResponse(authApiResponse, formData);
+
+        login(authData.user, authData.token);
+        setSubmitMessage(`Successfully registered ${authData.user.username}.`);
         navigate("/");
     }
 

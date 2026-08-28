@@ -6,6 +6,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import MyReviews from "./pages/MyReviews";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 export default function App() {
   return (
@@ -23,6 +24,8 @@ export default function App() {
             
           </Route>
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+
           
         </Routes>
       

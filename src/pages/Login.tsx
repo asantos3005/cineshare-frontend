@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
+import { getAuthDataFromResponse, useAuth } from "../auth/AuthContext";
 
 type LoginFormData = {
     email: string;
@@ -10,6 +11,7 @@ type LoginFormData = {
 
 export default function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [formData, setFormData] = useState<LoginFormData>({
         email: "",
         username: "",
@@ -47,9 +49,11 @@ export default function Login() {
             return;
         }
 
-        setSubmitMessage(
-            `Successfully logged in ${formData.username}.`
-        );
+        const authApiResponse = await response.json().catch(() => null);
+        const authData = getAuthDataFromResponse(authApiResponse, formData);
+
+        login(authData.user, authData.token);
+        setSubmitMessage(`Successfully logged in ${authData.user.username}.`);
         navigate("/");
     }
 
