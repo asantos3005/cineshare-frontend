@@ -5,7 +5,8 @@ import { IoMdStarHalf } from "react-icons/io";
 import { BiHeart } from "react-icons/bi";
 import { BiSolidHeart } from "react-icons/bi";
 import { PiChatCircleBold } from "react-icons/pi";
-export default function ProfileCircle({ reviewObject }: { reviewObject: ReviewCardData }) {
+
+export default function ReviewCard({ reviewObject }: { reviewObject: ReviewCardData }) {
 
     const [isLiked, setIsLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(reviewObject.likeCount);

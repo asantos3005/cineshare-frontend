@@ -21,6 +21,7 @@ export default function MenuDrawer() {
                 <NavLink to="/reviews">Reviews</NavLink>
                 <NavLink to="/watchlist">Watchlist</NavLink>
                 <NavLink to="/profile">Profile</NavLink>
+                <NavLink to="/register">Register</NavLink>
               </div>
               <div className="flex justify-end gap-3">
                 <Drawer.Close className="flex h-8 items-center justify-center gap-2 border border-neutral-950 bg-white px-3 text-sm leading-none whitespace-nowrap font-normal text-neutral-950 select-none hover:not-data-disabled:bg-neutral-100 active:not-data-disabled:bg-neutral-200 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950">

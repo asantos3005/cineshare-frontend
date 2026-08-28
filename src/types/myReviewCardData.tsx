@@ -1,4 +1,4 @@
-export type ReviewCardData = {
+export type myReviewCardData = {
   reviewId: string;
   movieTitle: string;
   movieReleaseYear: number;

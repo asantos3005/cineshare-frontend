@@ -5,6 +5,7 @@ import StandardLayout from "./layouts/StandardLayout";
 import NotFoundPage from "./pages/NotFoundPage";
 import MyReviews from "./pages/MyReviews";
 import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             
           </Route>
-
+          <Route path="/register" element={<Register />} />
           
         </Routes>
       
