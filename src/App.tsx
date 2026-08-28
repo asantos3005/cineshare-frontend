@@ -7,20 +7,26 @@ import MyReviews from "./pages/MyReviews";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
     <>
         <Routes>
           <Route element={<StandardLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
 
-            <Route path="/reviews">
-              <Route index element={<MyReviews />} />
-              <Route path="add-review" element={<AddReview />} />
+              <Route path="/reviews">
+                <Route index element={<MyReviews />} />
+                <Route path="add-review" element={<AddReview />} />
+              </Route>
+
+              <Route path="/profile" element={<Profile />} />
             </Route>
-            <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<NotFoundPage />} />
+
+            
             
           </Route>
           <Route path="/register" element={<Register />} />
