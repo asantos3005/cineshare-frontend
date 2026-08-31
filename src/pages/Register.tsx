@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
-import { useAuth } from "../auth/AuthContext";
 
 type RegisterFormData = {
     email: string;
@@ -11,7 +10,6 @@ type RegisterFormData = {
 
 export default function Register() {
     const navigate = useNavigate();
-    const { refreshCurrentUser } = useAuth();
     const [formData, setFormData] = useState<RegisterFormData>({
         email: "",
         username: "",
@@ -50,20 +48,21 @@ export default function Register() {
             return;
         }
 
-        const currentUser = await refreshCurrentUser();
-
-        setSubmitMessage(`Successfully registered ${currentUser?.username ?? formData.username}.`);
-        navigate("/");
+        setSubmitMessage(`Successfully registered ${formData.username}.`);
+        navigate("/login");
     }
 
     return (
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 py-6 sm:py-8">
-            <div className="flex flex-col gap-2">
-                <h1 className="page-title">Register</h1>
-                <p className="page-title-subheading">Create your CineShare account.</p>
+        <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-xl flex-col justify-center gap-6 py-6 sm:py-8">
+            <div className="flex flex-col gap-3 text-center sm:text-left">
+                <p className="text-sm font-semibold uppercase tracking-wider text-violet-700">Welcome to CineShare</p>
+                <h1 className="page-title">Create your account</h1>
+                <p className="page-title-subheading">
+                    Join CineShare to post reviews, keep track of movies, and see what other film fans are watching.
+                </p>
             </div>
 
-            <form className="flex flex-col gap-5" onSubmit={handleRegisterSubmit}>
+            <form className="flex flex-col gap-5 rounded-lg border border-neutral-200 bg-white p-5 shadow-sm sm:p-6" onSubmit={handleRegisterSubmit}>
                 <label className="flex flex-col gap-2">
                     <span className="text-sm font-semibold text-neutral-950">Email</span>
                     <input
@@ -122,6 +121,16 @@ export default function Register() {
                     </button>
                 </div>
             </form>
+
+            <p className="text-center text-sm text-neutral-700">
+                Already have an account?{" "}
+                <Link
+                    to="/login"
+                    className="font-semibold text-violet-700 hover:text-violet-900"
+                >
+                    Log in
+                </Link>
+            </p>
         </div>
     );
 }

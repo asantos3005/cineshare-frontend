@@ -3,6 +3,7 @@ import Searchbar from "../components/Searchbar";
 import { FaBold, FaItalic, FaListUl, FaQuoteLeft, FaUnderline } from "react-icons/fa";
 import { IoMdClose, IoMdStar, IoMdStarHalf, IoMdStarOutline } from "react-icons/io";
 import { useState, type FormEvent, type MouseEvent } from "react";
+import { useAuth } from "../auth/AuthContext";
 
 type MovieSearchResult = {
     externalMovieId: string;
@@ -12,16 +13,14 @@ type MovieSearchResult = {
 };
 
 type CreateReviewRequest = {
-    UserId: number;
     ExternalMovieId: string;
     Title: string;
     ReviewBody: string;
     Rating: number;
 };
 
-const currentUserId = 1;
-
 export default function AddReview() {
+    const { isAuthenticated, user } = useAuth();
     const [movieSearchResults, setMovieSearchResults] = useState<MovieSearchResult[]>([]);
     const [movieToReview, setMovieToReview] = useState<MovieSearchResult | null>(null);
     const [rating, setRating] = useState(0);
@@ -76,6 +75,11 @@ export default function AddReview() {
         setSubmitError("");
         setSubmitSuccess("");
 
+        if (!isAuthenticated || !user) {
+            setSubmitError("You need to be logged in before posting a review.");
+            return;
+        }
+
         if (!movieToReview) {
             setSubmitError("Choose a movie before posting your review.");
             return;
@@ -92,7 +96,6 @@ export default function AddReview() {
         }
 
         const reviewRequest: CreateReviewRequest = {
-            UserId: currentUserId,
             ExternalMovieId: movieToReview.externalMovieId,
             Title: reviewTitle.trim(),
             ReviewBody: reviewBody.trim(),
@@ -104,6 +107,7 @@ export default function AddReview() {
         try {
             const response = await fetch("http://localhost:5203/api/reviews", {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
