@@ -6,6 +6,7 @@ const API_BASE_URL = "http://localhost:5203";
 export type AuthUser = {
     userId?: number | string;
     username: string;
+    profileURL?: string | null;
 };
 
 type AuthApiResponse = {
@@ -15,6 +16,10 @@ type AuthApiResponse = {
     email?: string;
     username?: string;
     userName?: string;
+    profileURL?: string | null;
+    profileUrl?: string | null;
+    profilePictureUrl?: string | null;
+    userProfilePictureUrl?: string | null;
 };
 
 type AuthContextValue = {
@@ -122,5 +127,13 @@ export function getAuthUserFromResponse(
             authApiResponse?.userName ??
             fallbackUser?.username ??
             "",
+        profileURL:
+            apiUser?.profileURL ??
+            authApiResponse?.profileURL ??
+            authApiResponse?.profileUrl ??
+            authApiResponse?.profilePictureUrl ??
+            authApiResponse?.userProfilePictureUrl ??
+            fallbackUser?.profileURL ??
+            null,
     };
 }
