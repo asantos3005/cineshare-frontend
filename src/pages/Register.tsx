@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
-import { getAuthDataFromResponse, useAuth } from "../auth/AuthContext";
+import { useAuth } from "../auth/AuthContext";
 
 type RegisterFormData = {
     email: string;
@@ -11,7 +11,7 @@ type RegisterFormData = {
 
 export default function Register() {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { refreshCurrentUser } = useAuth();
     const [formData, setFormData] = useState<RegisterFormData>({
         email: "",
         username: "",
@@ -37,6 +37,7 @@ export default function Register() {
             "http://localhost:5203/api/auth/register",
             {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -49,11 +50,9 @@ export default function Register() {
             return;
         }
 
-        const authApiResponse = await response.json().catch(() => null);
-        const authData = getAuthDataFromResponse(authApiResponse, formData);
+        const currentUser = await refreshCurrentUser();
 
-        login(authData.user, authData.token);
-        setSubmitMessage(`Successfully registered ${authData.user.username}.`);
+        setSubmitMessage(`Successfully registered ${currentUser?.username ?? formData.username}.`);
         navigate("/");
     }
 

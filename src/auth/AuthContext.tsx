@@ -1,86 +1,87 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-const AUTH_USER_STORAGE_KEY = "cineshare-auth-user";
-const AUTH_TOKEN_STORAGE_KEY = "cineshare-auth-token";
+const API_BASE_URL = "http://localhost:5203";
 
 export type AuthUser = {
     userId?: number | string;
-    email: string;
     username: string;
 };
 
 type AuthApiResponse = {
-    token?: string;
-    accessToken?: string;
-    user?: Partial<AuthUser>;
+    user?: Partial<AuthUser> & { userName?: string };
     userId?: number | string;
     id?: number | string;
     email?: string;
     username?: string;
+    userName?: string;
 };
 
 type AuthContextValue = {
     user: AuthUser | null;
-    token: string | null;
+    isLoading: boolean;
     isAuthenticated: boolean;
-    login: (user: AuthUser, token?: string | null) => void;
-    logout: () => void;
+    login: (user: AuthUser) => void;
+    logout: () => Promise<void>;
+    refreshCurrentUser: () => Promise<AuthUser | null>;
 };
 
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function getStoredUser() {
-    const storedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY);
-
-    if (!storedUser) {
-        return null;
-    }
-
-    try {
-        return JSON.parse(storedUser) as AuthUser;
-    } catch {
-        localStorage.removeItem(AUTH_USER_STORAGE_KEY);
-        return null;
-    }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<AuthUser | null>(() => getStoredUser());
-    const [token, setToken] = useState<string | null>(() =>
-        localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)
-    );
+    const [user, setUser] = useState<AuthUser | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    function login(authenticatedUser: AuthUser, authToken?: string | null) {
+    function login(authenticatedUser: AuthUser) {
         setUser(authenticatedUser);
-        localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(authenticatedUser));
+    }
 
-        setToken(authToken ?? null);
+    async function refreshCurrentUser() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+                credentials: "include",
+            });
 
-        if (authToken) {
-            localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, authToken);
-        } else {
-            localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+            if (!response.ok) {
+                setUser(null);
+                return null;
+            }
+
+            const authApiResponse = await response.json();
+            const currentUser = getAuthUserFromResponse(authApiResponse);
+
+            setUser(currentUser);
+            return currentUser;
+        } catch {
+            setUser(null);
+            return null;
         }
     }
 
-    function logout() {
+    async function logout() {
+        await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            method: "POST",
+            credentials: "include",
+        }).catch(() => null);
+
         setUser(null);
-        setToken(null);
-        localStorage.removeItem(AUTH_USER_STORAGE_KEY);
-        localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
     }
+
+    useEffect(() => {
+        refreshCurrentUser().finally(() => setIsLoading(false));
+    }, []);
 
     const authContextValue = useMemo(
         () => ({
             user,
-            token,
+            isLoading,
             isAuthenticated: user !== null,
             login,
             logout,
+            refreshCurrentUser,
         }),
-        [user, token]
+        [user, isLoading]
     );
 
     return (
@@ -100,18 +101,26 @@ export function useAuth() {
     return authContext;
 }
 
-export function getAuthDataFromResponse(
+
+// Construct a global user auth object after login
+export function getAuthUserFromResponse(
     authApiResponse: AuthApiResponse | null,
-    fallbackUser: AuthUser
+    fallbackUser?: AuthUser
 ) {
+    // Auth endpoints often return either { user: {...} }
+    // or a flatter shape like { email: "...", username: "..." }.
     const apiUser = authApiResponse?.user;
 
     return {
-        user: {
-            userId: apiUser?.userId ?? authApiResponse?.userId ?? authApiResponse?.id,
-            email: apiUser?.email ?? authApiResponse?.email ?? fallbackUser.email,
-            username: apiUser?.username ?? authApiResponse?.username ?? fallbackUser.username,
-        },
-        token: authApiResponse?.token ?? authApiResponse?.accessToken ?? null,
+        // Prefer values from the API response, then fall back to the form data
+        // so the auth state still has a usable user after a successful request.
+        userId: apiUser?.userId ?? authApiResponse?.userId ?? authApiResponse?.id,
+        username:
+            apiUser?.username ??
+            apiUser?.userName ??
+            authApiResponse?.username ??
+            authApiResponse?.userName ??
+            fallbackUser?.username ??
+            "",
     };
 }

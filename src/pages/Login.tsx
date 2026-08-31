@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
-import { getAuthDataFromResponse, useAuth } from "../auth/AuthContext";
+import { useAuth } from "../auth/AuthContext";
 
 type LoginFormData = {
-    email: string;
     username: string;
     password: string;
 };
 
 export default function Login() {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { refreshCurrentUser } = useAuth();
     const [formData, setFormData] = useState<LoginFormData>({
-        email: "",
         username: "",
         password: "",
     });
@@ -37,6 +35,7 @@ export default function Login() {
             "http://localhost:5203/api/auth/login",
             {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -49,11 +48,9 @@ export default function Login() {
             return;
         }
 
-        const authApiResponse = await response.json().catch(() => null);
-        const authData = getAuthDataFromResponse(authApiResponse, formData);
+        const currentUser = await refreshCurrentUser();
 
-        login(authData.user, authData.token);
-        setSubmitMessage(`Successfully logged in ${authData.user.username}.`);
+        setSubmitMessage(`Successfully logged in ${currentUser?.username ?? formData.username}.`);
         navigate("/");
     }
 
@@ -65,20 +62,6 @@ export default function Login() {
             </div>
 
             <form className="flex flex-col gap-5" onSubmit={handleLoginSubmit}>
-                <label className="flex flex-col gap-2">
-                    <span className="text-sm font-semibold text-neutral-950">Email</span>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="you@example.com"
-                        autoComplete="email"
-                        required
-                        className="h-12 rounded-lg border border-neutral-300 bg-white px-4 text-base text-neutral-950 shadow-sm placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950"
-                    />
-                </label>
-
                 <label className="flex flex-col gap-2">
                     <span className="text-sm font-semibold text-neutral-950">Username</span>
                     <input
