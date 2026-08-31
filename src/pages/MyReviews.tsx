@@ -1,19 +1,26 @@
 import Searchbar from "../components/Searchbar";
 import AppLinkButton from "../components/LinkButton";
 import { useState, useEffect } from "react";
-import type { ReviewCardData } from "../types/reviewCardData";
+import MyReviewCard from "../components/MyReviewCard";
+import myReviewMapper from "../mappers/myReviewsMapper";
+import type { myReviewCardData } from "../types/myReviewCardData";
 
 
 
 export default function MyReviews() {
-    const [reviews, setReviews] = useState<ReviewCardData[]>([]);
+    const [reviews, setReviews] = useState<myReviewCardData[]>([]);
 
     useEffect(() => {
         // Fetch the user's reviews from your API and set them in state
         // For example:
-        fetch('http://localhost:5203/api/user/my-reviews')
+        fetch('http://localhost:5203/api/user/my-reviews', {
+            credentials: "include",
+        })
             .then(response => response.json())
-            .then(data => setReviews(data));
+            .then(data => {
+                            const mappedReviews = data.map((apiReview: any) => myReviewMapper(apiReview));
+                            setReviews(mappedReviews);
+            });
     }, []);
 
 
@@ -38,6 +45,7 @@ export default function MyReviews() {
                     reviews.map((review) => (
                         <div key={review.reviewId}>
                             {/* Render your ReviewCard component here */}
+                            <MyReviewCard reviewObject={review}/>
                         </div>
                     ))
                 )}
