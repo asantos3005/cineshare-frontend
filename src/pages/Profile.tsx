@@ -1,7 +1,8 @@
 const profile = {
-    name: "Alex Johnson",
+    firstName: "Alex",
+    lastName: "Johnson",
     username: "@alexjohnson",
-    avatarUrl: "https://i.pravatar.cc/160?img=12",
+    profilePictureUrl: "https://i.pravatar.cc/160?img=12",
     bio: "Movie lover, coffee enthusiast, and always looking for new recommendations.",
     stats: [
         { label: "Reviews", value: 32 },
@@ -37,12 +38,13 @@ export default function Profile() {
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                         <img
-                            src={profile.avatarUrl}
-                            alt={`${profile.name}'s profile`}
+                            src={profile.profilePictureUrl}
+                            alt={`${profile.firstName}'s profile`}
                             className="h-24 w-24 rounded-full object-cover ring-2 ring-neutral-200 sm:h-28 sm:w-28"
                         />
                         <div>
-                            <h1 className="page-title">{profile.name}</h1>
+                            <h1 className="page-title inline">{profile.firstName}</h1>
+                            <h1 className="page-title inline"> {profile.lastName}</h1>
                             <p className="page-title-subheading">{profile.username}</p>
                         </div>
                     </div>
@@ -87,7 +89,7 @@ export default function Profile() {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                        <h2 className="text-section-title">Recently Watched</h2>
+                        <h2 className="text-section-title">Top 4 Favourite Movies</h2>
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
                             {profile.recentlyWatched.map((movie) => (
                                 <article key={movie.title} className="flex flex-col gap-2">

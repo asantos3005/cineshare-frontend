@@ -14,7 +14,8 @@ export type ProfileData = {
 
     genres: string[];
 
-    recentlyWatched: {
+    fourFavouriteMovies: {
+        movieId: number;
         title: string;
         posterUrl: string;
     }[];
