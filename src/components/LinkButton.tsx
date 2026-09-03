@@ -3,18 +3,12 @@ import { Link } from "react-router";
 type AppLinkButtonProps = {
   to: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
 };
 
-export default function AppLinkButton({ to, children, variant = "primary" }: AppLinkButtonProps) {
-  const variantClasses = {
-    primary: "bg-violet-700 text-white hover:bg-violet-800",
-    secondary: "border border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-50",
-    ghost: "text-neutral-700 hover:bg-neutral-100",
-  };
+export default function AppLinkButton({ to, children }: AppLinkButtonProps) {
 
   return (
-    <Link to={to} className={`inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium shadow-sm focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 ${variantClasses[variant]}`}>
+    <Link to={to} className={`flex h-8 items-center justify-center gap-2 rounded-none border border-neutral-950 bg-white px-3 text-sm leading-none whitespace-nowrap font-normal text-neutral-950 select-none hover:not-data-disabled:bg-neutral-100 active:not-data-disabled:bg-neutral-200 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 dark:focus-visible:outline-white data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 dark:border-white dark:bg-neutral-950 dark:text-white dark:hover:not-data-disabled:bg-neutral-800 dark:active:not-data-disabled:bg-neutral-700 dark:data-disabled:border-neutral-400 dark:data-disabled:text-neutral-400`}>
       {children}
     </Link>
   );

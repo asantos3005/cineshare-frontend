@@ -6,6 +6,7 @@ import { BiHeart } from "react-icons/bi";
 import { BiSolidHeart } from "react-icons/bi";
 import { PiChatCircleBold } from "react-icons/pi";
 import { Link } from 'react-router';
+import defaultImage from "../assets/default.jpg";
 
 export default function ReviewCard({ reviewObject }: { reviewObject: ReviewCardData }) {
 
@@ -41,7 +42,8 @@ export default function ReviewCard({ reviewObject }: { reviewObject: ReviewCardD
     <article className="rounded-lg border border-neutral-300 bg-white p-4 shadow-sm sm:p-5">
         {/* Top Bar of the review card*/}
         <div className="mb-4 flex items-center gap-3">
-            <img src={reviewObject.author.profileImageUrl || 'https://via.placeholder.com/150'} alt={`${reviewObject.author.username}'s profile`} className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12" />
+            <img src={reviewObject.author.profileImageUrl || defaultImage } alt={`${reviewObject.author.username}'s profile`} 
+            className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12" />
             <div className="flex min-w-0 flex-col">
                 <Link to={`/profile/${reviewObject.author.username}`} className="text-sm font-semibold text-neutral-950 hover:underline">
                     {reviewObject.author.username}

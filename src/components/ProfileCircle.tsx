@@ -14,7 +14,7 @@ export default function ProfileCircle() {
             <img
             src={user?.profileURL || defaultImage}
             alt={`${user?.username}'s profile`}
-            className="h-24 w-24 rounded-full object-cover ring-2 ring-neutral-200 sm:h-28 sm:w-28"
+            className="h-10 w-10 rounded-full object-cover"
             />
         </Link>
     );

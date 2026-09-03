@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type { ProfileData } from "../types/profileData";
 import defaultImage from "../assets/default.jpg";
-
+import { useAuth } from "../auth/AuthContext";
 
 
 export default function Profile() {
     const navigate = useNavigate();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [profileError, setProfileError] = useState("");
+    const { user } = useAuth();
+    const { username } = useParams();
+
+    // Check if the logged in user from auth context is the same as the profile being viewed. If so, show the edit button.
+    const isOwnProfile = user?.username.toLowerCase() === username?.toLowerCase();
 
     useEffect(() => {
-        fetch('http://localhost:5203/api/user/my-profile', {
+        if (!username) {
+            setProfileError("Profile username was not provided.");
+            return;
+        }
+
+        fetch(`http://localhost:5203/api/user/profile/${encodeURIComponent(username)}`, {
             credentials: "include",
         })
             .then(response => {
@@ -39,7 +49,7 @@ export default function Profile() {
             })
         
         
-    }, [navigate]);
+    }, [navigate, username]);
 
     if (!profileData) {
         return <div>{profileError || "Loading..."}</div>;
@@ -51,7 +61,7 @@ export default function Profile() {
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                         <img
-                            src={profileData.profilePictureUrl ?? defaultImage}
+                            src={profileData.profilePictureUrl || defaultImage}
                             alt={`${profileData.firstName}'s profile`}
                             className="h-24 w-24 rounded-full object-cover ring-2 ring-neutral-200 sm:h-28 sm:w-28"
                         />
@@ -62,12 +72,14 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    <button
-                        type="button"
-                        className="inline-flex h-10 items-center justify-center self-start rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium text-neutral-950 shadow-sm hover:bg-neutral-50 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950"
-                    >
-                        Edit Profile
+                    {isOwnProfile && (
+                        <button
+                            type="button"
+                            className="inline-flex h-10 items-center justify-center self-start rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium text-neutral-950 shadow-sm hover:bg-neutral-50 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950"
+                        >
+                            Edit Profile
                     </button>
+                )}
                 </div>
 
                 <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-neutral-200 pt-5 sm:grid-cols-4 sm:gap-6">
