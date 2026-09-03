@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router";
 import { FaUserPlus } from "react-icons/fa";
 
 type RegisterFormData = {
+    firstName: string;
+    lastName: string;
     email: string;
     username: string;
     password: string;
@@ -11,6 +13,8 @@ type RegisterFormData = {
 export default function Register() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<RegisterFormData>({
+        firstName: "",
+        lastName: "",
         email: "",
         username: "",
         password: "",
@@ -63,6 +67,36 @@ export default function Register() {
             </div>
 
             <form className="flex flex-col gap-5 rounded-lg border border-neutral-200 bg-white p-5 shadow-sm sm:p-6" onSubmit={handleRegisterSubmit}>
+                <div className="grid gap-5 sm:grid-cols-2">
+                    <label className="flex flex-col gap-2">
+                        <span className="text-sm font-semibold text-neutral-950">First Name</span>
+                        <input
+                            type="text"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            placeholder="First name"
+                            autoComplete="given-name"
+                            required
+                            className="h-12 rounded-lg border border-neutral-300 bg-white px-4 text-base text-neutral-950 shadow-sm placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950"
+                        />
+                    </label>
+
+                    <label className="flex flex-col gap-2">
+                        <span className="text-sm font-semibold text-neutral-950">Last Name</span>
+                        <input
+                            type="text"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            placeholder="Last name"
+                            autoComplete="family-name"
+                            required
+                            className="h-12 rounded-lg border border-neutral-300 bg-white px-4 text-base text-neutral-950 shadow-sm placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-1 focus:outline-neutral-950"
+                        />
+                    </label>
+                </div>
+
                 <label className="flex flex-col gap-2">
                     <span className="text-sm font-semibold text-neutral-950">Email</span>
                     <input

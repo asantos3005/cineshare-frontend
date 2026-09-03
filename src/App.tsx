@@ -22,7 +22,7 @@ export default function App() {
                 <Route path="add-review" element={<AddReview />} />
               </Route>
 
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:username" element={<Profile />} />
             </Route>
           <Route path="*" element={<NotFoundPage />} />
 

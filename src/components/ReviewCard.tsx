@@ -5,6 +5,7 @@ import { IoMdStarHalf } from "react-icons/io";
 import { BiHeart } from "react-icons/bi";
 import { BiSolidHeart } from "react-icons/bi";
 import { PiChatCircleBold } from "react-icons/pi";
+import { Link } from 'react-router';
 
 export default function ReviewCard({ reviewObject }: { reviewObject: ReviewCardData }) {
 
@@ -42,7 +43,9 @@ export default function ReviewCard({ reviewObject }: { reviewObject: ReviewCardD
         <div className="mb-4 flex items-center gap-3">
             <img src={reviewObject.author.profileImageUrl || 'https://via.placeholder.com/150'} alt={`${reviewObject.author.username}'s profile`} className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12" />
             <div className="flex min-w-0 flex-col">
-                <span className="text-sm font-semibold">{reviewObject.author.username}</span>
+                <Link to={`/profile/${reviewObject.author.username}`} className="text-sm font-semibold text-neutral-950 hover:underline">
+                    {reviewObject.author.username}
+                </Link>
                 <span className="text-xs text-gray-500">{new Date(reviewObject.reviewedAt).toLocaleDateString()}</span>
             </div>
         </div>

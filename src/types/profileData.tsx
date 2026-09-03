@@ -12,11 +12,11 @@ export type ProfileData = {
         followingCount: number;
     };
 
-    genres: string[];
+    genres: string[] | [];
 
     fourFavouriteMovies: {
         movieId: number;
         title: string;
         posterUrl: string;
-    }[];
+    }[] | [];
 };
