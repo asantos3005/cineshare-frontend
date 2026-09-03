@@ -3,13 +3,24 @@ import { useNavigate, useParams } from "react-router";
 import type { ProfileData } from "../types/profileData";
 import defaultImage from "../assets/default.jpg";
 import { useAuth } from "../auth/AuthContext";
+import FollowingButton from "../components/FollowingButtton";
+
+type FollowStatusResponse = {
+    isFollowing: boolean;
+};
 
 
 export default function Profile() {
     const navigate = useNavigate();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [profileError, setProfileError] = useState("");
+
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [isFollowStatusLoading, setIsFollowStatusLoading] = useState(false);
+    const [followError, setFollowError] = useState("");
+
     const { user } = useAuth();
+    // Username represents the profile being viewed, not the logged in user!
     const { username } = useParams();
 
     // Check if the logged in user from auth context is the same as the profile being viewed. If so, show the edit button.
@@ -51,6 +62,102 @@ export default function Profile() {
         
     }, [navigate, username]);
 
+    useEffect(() => {
+        setFollowError("");
+
+        if (!username || isOwnProfile) {
+            setIsFollowing(false);
+            return;
+        }
+
+        setIsFollowStatusLoading(true);
+
+        fetch(`http://localhost:5203/api/user/profile/${encodeURIComponent(username)}/follow-status`, {
+            credentials: "include",
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    navigate("/login");
+                    return null;
+                }
+
+                if (!response.ok) {
+                    throw new Error(`Follow status request failed with status ${response.status}`);
+                }
+
+                return response.json() as Promise<FollowStatusResponse>;
+            })
+            .then(data => {
+                if (!data) {
+                    return;
+                }
+
+                setIsFollowing(data.isFollowing);
+            })
+            .catch(error => {
+                console.error("Error fetching follow status:", error);
+                setFollowError("Follow status could not be loaded.");
+            })
+            .finally(() => {
+                setIsFollowStatusLoading(false);
+            });
+    }, [isOwnProfile, navigate, username]);
+
+    async function handleFollowToggle() {
+        if (!username || isFollowStatusLoading) {
+            return;
+        }
+
+        setFollowError("");
+        setIsFollowStatusLoading(true);
+
+        try {
+            const response = await fetch(
+                `http://localhost:5203/api/user/profile/${encodeURIComponent(username)}/follow`,
+                {
+                    method: isFollowing ? "DELETE" : "POST",
+                    credentials: "include",
+                }
+            );
+
+            if (response.status === 401) {
+                navigate("/login");
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(`Follow request failed with status ${response.status}`);
+            }
+
+            const nextIsFollowing = !isFollowing;
+
+            setIsFollowing(nextIsFollowing);
+            setProfileData((currentProfileData) => {
+                if (!currentProfileData) {
+                    return currentProfileData;
+                }
+
+                const followerCountChange = nextIsFollowing ? 1 : -1;
+
+                return {
+                    ...currentProfileData,
+                    stats: {
+                        ...currentProfileData.stats,
+                        followerCount: Math.max(
+                            0,
+                            currentProfileData.stats.followerCount + followerCountChange
+                        ),
+                    },
+                };
+            });
+        } catch (error) {
+            console.error("Error updating follow status:", error);
+            setFollowError("Follow status could not be updated.");
+        } finally {
+            setIsFollowStatusLoading(false);
+        }
+    }
+
     if (!profileData) {
         return <div>{profileError || "Loading..."}</div>;
     }
@@ -80,6 +187,18 @@ export default function Profile() {
                             Edit Profile
                     </button>
                 )}
+                    {!isOwnProfile && (
+                        <div className="flex flex-col items-start gap-2">
+                            <FollowingButton
+                                isFollowing={isFollowing}
+                                isLoading={isFollowStatusLoading}
+                                onClick={handleFollowToggle}
+                            />
+                            {followError && (
+                                <p className="text-sm font-semibold text-red-700">{followError}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-neutral-200 pt-5 sm:grid-cols-4 sm:gap-6">
