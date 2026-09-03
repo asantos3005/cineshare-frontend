@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthContext";
 
 export default function MenuDrawer() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   async function handleLogout() {
     await logout();
@@ -29,7 +29,7 @@ export default function MenuDrawer() {
                 <NavLink to="/movies">Movies</NavLink>
                 <NavLink to="/reviews">Reviews</NavLink>
                 <NavLink to="/watchlist">Watchlist</NavLink>
-                <NavLink to="/profile">Profile</NavLink>
+                <NavLink to={`/profile/${user?.username}`}>Profile</NavLink>
                 <button
                   type="button"
                   onClick={handleLogout}
