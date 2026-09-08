@@ -11,6 +11,7 @@ type SearchbarProps = {
   className?: string;
   inputClassName?: string;
   buttonClassName?: string;
+  asForm?: boolean;
   onSearch?: (query: string) => void | Promise<void>;
 };
 
@@ -21,10 +22,12 @@ export default function Searchbar({
   className,
   inputClassName,
   buttonClassName,
+  asForm = true,
   onSearch,
 }: SearchbarProps) {
   const [errors, setErrors] = React.useState<Record<string, string | string[]>>({});
   const [loading, setLoading] = React.useState(false);
+  const [query, setQuery] = React.useState("");
   
   const formClassName = [
     'flex min-w-0 flex-1 items-start gap-2 sm:gap-3',
@@ -39,6 +42,64 @@ export default function Searchbar({
     buttonClassName,
   ].filter(Boolean).join(' ');
 
+  async function submitSearch(searchQuery: string) {
+    const trimmedQuery = searchQuery.trim();
+
+    if (!trimmedQuery) {
+      setErrors({ [name]: 'Enter a search term' });
+      return;
+    }
+
+    setErrors({});
+    setLoading(true);
+
+    try {
+      await onSearch?.(trimmedQuery);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (!asForm) {
+    const error = errors[name];
+
+    return (
+      <div className={formClassName}>
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+          <input
+            type="search"
+            required
+            name={name}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                submitSearch(query);
+              }
+            }}
+            placeholder={placeholder}
+            className={controlClassName}
+          />
+          {error && (
+            <p className="text-sm text-red-700">
+              {Array.isArray(error) ? error[0] : error}
+            </p>
+          )}
+        </div>
+        <Button
+          disabled={loading}
+          focusableWhenDisabled
+          type="button"
+          onClick={() => submitSearch(query)}
+          className={submitButtonClassName}
+        >
+          {buttonText}
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <Form
       className={formClassName}
@@ -46,21 +107,9 @@ export default function Searchbar({
       onSubmit={async (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const query = formData.get(name)?.toString().trim() ?? '';
+        const formQuery = formData.get(name)?.toString() ?? '';
 
-        if (!query) {
-          setErrors({ [name]: 'Enter a search term' });
-          return;
-        }
-
-        setErrors({});
-        setLoading(true);
-
-        try {
-          await onSearch?.(query);
-        } finally {
-          setLoading(false);
-        }
+        await submitSearch(formQuery);
       }}
     >
       <Field.Root name={name} className="flex min-w-0 flex-1 flex-col items-start gap-1">
