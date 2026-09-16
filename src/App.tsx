@@ -24,7 +24,6 @@ export default function App() {
 
               <Route path="/profile/:username" element={<Profile />} />
             </Route>
-          <Route path="/profile-preview/:username" element={<Profile />} />
           <Route path="*" element={<NotFoundPage />} />
 
             

@@ -68,7 +68,6 @@ export default function Searchbar({
         <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
           <input
             type="search"
-            required
             name={name}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
