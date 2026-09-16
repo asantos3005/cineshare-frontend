@@ -2,8 +2,13 @@ import type { myReviewCardData } from '../types/myReviewCardData';
 import { IoMdStar } from "react-icons/io";
 import { IoMdStarHalf } from "react-icons/io";
 
+type MyReviewCardProps = {
+    reviewObject: myReviewCardData;
+    onDelete: (reviewId: string) => void;
+};
 
-export default function MyReviewCard({ reviewObject }: { reviewObject: myReviewCardData }) {
+
+export default function MyReviewCard({ reviewObject, onDelete }: MyReviewCardProps) {
 
     function renderStars(rating: number) {
         const normalizedRating = Number.isFinite(rating) ? Math.max(0, Math.min(rating, 5)) : 0;
@@ -38,6 +43,10 @@ export default function MyReviewCard({ reviewObject }: { reviewObject: myReviewC
                 </div>
                 <p className="text-body">{reviewObject.reviewBody}</p>
             </div>
+
+            <button className="ml-auto rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600 sm:ml-0 sm:mt-auto" onClick={() => onDelete(reviewObject.reviewId)}>
+                Delete
+            </button>
         </div>
         
     </article>

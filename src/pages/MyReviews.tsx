@@ -10,6 +10,25 @@ import type { myReviewCardData } from "../types/myReviewCardData";
 export default function MyReviews() {
     const [reviews, setReviews] = useState<myReviewCardData[]>([]);
 
+    function handleDelete(reviewId: string) {
+        // TODO - Create delete endpoint in backend and call it here to delete the review from the database
+        fetch(`http://localhost:5203/api/user/my-reviews/${reviewId}`, {
+            method: 'DELETE',
+            credentials: "include",
+        })
+            .then(response => {
+                if (response.ok) {
+                    // If the deletion was successful, update the state to remove the deleted review
+                    setReviews(prevReviews => prevReviews.filter(review => review.reviewId !== reviewId));
+                } else {
+                    console.error('Failed to delete review');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting review:', error);
+            });
+        }
+
     useEffect(() => {
         // Fetch the user's reviews from your API and set them in state
         // For example:
@@ -45,7 +64,7 @@ export default function MyReviews() {
                     reviews.map((review) => (
                         <div key={review.reviewId}>
                             {/* Render your ReviewCard component here */}
-                            <MyReviewCard reviewObject={review}/>
+                            <MyReviewCard reviewObject={review} onDelete={handleDelete} />
                         </div>
                     ))
                 )}
