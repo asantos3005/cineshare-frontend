@@ -12,7 +12,7 @@ export default function MyReviews() {
 
     function handleDelete(reviewId: string) {
         // TODO - Create delete endpoint in backend and call it here to delete the review from the database
-        fetch(`http://localhost:5203/api/user/my-reviews/${reviewId}`, {
+        fetch(`http://localhost:5203/api/reviews/${reviewId}`, {
             method: 'DELETE',
             credentials: "include",
         })
