@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Movies from "./pages/Movies";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route element={<StandardLayout />}>
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Home />} />
+              <Route path="/movies" element={<Movies />} />
 
               <Route path="/reviews">
                 <Route index element={<MyReviews />} />
